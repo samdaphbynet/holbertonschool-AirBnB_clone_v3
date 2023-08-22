@@ -81,13 +81,13 @@ class FileStorage:
 
     def count(self, cls=None):
         """A method to count the number of objects in storage"""
-        dicte= self.__objects.items()
+        dictionnary_object = self.__objects.items()
         count = 0
 
         if cls is None:
-            return len(dicte)
+            return len(dictionnary_object)
         else:
-            for key, value in dicte:
+            for key, value in dictionnary_object:
                 if cls == type(value):
                     count += 1
         return count
