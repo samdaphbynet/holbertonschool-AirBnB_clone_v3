@@ -6,6 +6,7 @@
 """
 from flask import Flask
 import os
+from flask import jsonify
 from models import storage
 from api.v1.views import app_views
 
@@ -23,6 +24,23 @@ def teardown_app_context(exception):
     context is torn down.
     """
     storage.close()
+
+
+@app.errorhandler(404)
+def page_not_find(ext):
+    """
+    The function returns a JSON response with an error message indicating that
+    the page was not found.
+
+    :param ext: The parameter "ext" is not used in the code snippet provided.
+    It seems to be an unused
+    parameter
+    :return: a JSON response with an error message "Not found".
+    """
+    return jsonify(
+        {
+            "error": "Not found"
+        })
 
 
 if __name__ == "__main__":
