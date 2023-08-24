@@ -37,10 +37,12 @@ def page_not_find(ext):
     parameter
     :return: a JSON response with an error message "Not found".
     """
-    return jsonify(
-        {
+    handler = {
             "error": "Not found"
-        })
+            }
+    res = jsonify(handler)
+    res.status_code = 404
+    return (res)
 
 
 if __name__ == "__main__":
