@@ -5,6 +5,7 @@
     to close the storage context after the application context is torn down.
 """
 from flask import Flask
+from flask_cors import CORS
 import os
 from flask import jsonify
 from models import storage
@@ -12,6 +13,8 @@ from api.v1.views import app_views
 
 
 app = Flask(__name__)
+
+CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
 app.register_blueprint(app_views)
 
