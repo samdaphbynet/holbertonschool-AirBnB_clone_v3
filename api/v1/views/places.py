@@ -16,7 +16,7 @@ def found_place(city_id):
     a given state ID and returns it as a JSON response.
     """
     list_place = []
-    obj_place = storage.get("Place", str(city_id))
+    obj_place = storage.get("City", str(city_id))
     if obj_place is None:
         abort(404)
     for key in obj_place.places:
@@ -42,7 +42,7 @@ def delete_place(place_id):
     """
     The function deletes a place object from storage based on its ID.
     """
-    obj_place = storage.get("place", str(place_id))
+    obj_place = storage.get("Place", str(place_id))
     if obj_place is None:
         abort(404)
     storage.delete(obj_place)
