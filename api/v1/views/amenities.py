@@ -65,7 +65,7 @@ def create_amenity():
 
     new_amenity = Amenity(**data_amenity)
     new_amenity.save()
-    response = jsonify(new_amenity)
+    response = jsonify(new_amenity.to_dict())
     response.status_code = 201
     return response
 
@@ -79,10 +79,10 @@ def update_amenity(amenity_id):
     """
     data_amenity = request.get_json(silent=True)
     if data_amenity is None:
-        abort(404)
+        abort(400, "Not a JSON")
     fetch = storage.get("Amenity", str(amenity_id))
     if fetch is None:
-        abort(400, "Not a JSON")
+        abort(404)
     for key, value in data_amenity.items():
         if key not in ["id", "created_at", "updated_at"]:
             setattr(fetch, key, value)
