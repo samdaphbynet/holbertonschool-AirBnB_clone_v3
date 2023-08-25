@@ -8,15 +8,15 @@ from api.v1.views import app_views, storage
 from models.place import Place
 
 
-@app_views.route("/cities/<place_id>/places", methods=["GET"],
+@app_views.route("/cities/<city_id>/places", methods=["GET"],
                  strict_slashes=False)
-def found_place(place_id):
+def found_place(city_id):
     """
     The function "found_place" retrieves a list of cities associated with
     a given state ID and returns it as a JSON response.
     """
     list_place = []
-    obj_place = storage.get("Place", place_id)
+    obj_place = storage.get("Place", str(city_id))
     if obj_place is None:
         abort(404)
     for key in obj_place.places:
@@ -61,9 +61,14 @@ def create_place(city_id):
     if new_place is None:
         abort(400, "Not a JSON")
 
-    if not storage.get("State", str(city_id)):
+    if not storage.get("User", new_place["user_id"]):
         abort(404)
 
+    if not storage.get("City", city_id):
+        abort(404)
+
+    if "user_id" not in new_place:
+        abort(400, "Missing user_id")
     if "name" not in new_place:
         abort(400, "Missing name")
 
@@ -82,13 +87,17 @@ def update_place(place_id):
     the provided JSON data.
     """
     put_place = request.get_json(silent=True)
+
     if put_place is None:
         abort(400, "Not a JSON")
+
     fetch = storage.get("Place", str(place_id))
+
     if fetch is None:
         abort(404)
+
     for key, value in put_place.items():
-        if key not in ["id", "created_at", "updated_at", "state_id"]:
+        if key not in ["id", "created_at", "updated_at", "user_id"]:
             setattr(fetch, key, value)
     fetch.save()
     return jsonify(fetch.to_dict())
